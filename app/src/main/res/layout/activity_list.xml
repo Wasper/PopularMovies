@@ -12,6 +12,7 @@
     tools:context="pl.wasper.popularmovies.ListActivity">
 
     <TextView
+        android:id="@+id/test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
