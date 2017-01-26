@@ -6,6 +6,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -20,20 +21,13 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
     private URL url;
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(this, 2);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new ListAdapter();
-        mRecyclerView.setAdapter(mAdapter);
-
+        prepareRecyclerView();
         sortByTopRated();
     }
 
@@ -59,6 +53,12 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void adaptElements(ArrayList<Movie> movies) {
+        mAdapter.setMoviesList(movies);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
     public void sortByPopular() {
         url = URLBuilder.buildUrl(URLBuilder.POPULAR_PATH);
         new MoviesListTask(this).execute(url);
@@ -69,9 +69,14 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
         new MoviesListTask(this).execute(url);
     }
 
-    @Override
-    public void adaptElements(ArrayList<Movie> movies) {
-        mAdapter.setMoviesList(movies);
+    private void prepareRecyclerView() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new ListAdapter();
         mRecyclerView.setAdapter(mAdapter);
     }
 }
