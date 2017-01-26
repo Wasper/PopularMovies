@@ -1,7 +1,6 @@
 package pl.wasper.popularmovies.task;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import org.json.JSONException;
 import java.io.IOException;
 import java.net.URL;
@@ -15,6 +14,11 @@ import pl.wasper.popularmovies.parser.JSONParser;
  */
 
 public class MoviesListTask extends AsyncTask<URL, Void, String> {
+    private ListCallback mListCallback;
+
+    public MoviesListTask(ListCallback listCallback) {
+        this.mListCallback = listCallback;
+    }
 
     @Override
     protected String doInBackground(URL... params) {
@@ -42,8 +46,6 @@ public class MoviesListTask extends AsyncTask<URL, Void, String> {
             e.printStackTrace();
         }
 
-        for (int i=0; i<movies.size(); i++) {
-            Log.d("MOVIES", movies.get(i).getTitle());
-        }
+        mListCallback.adaptElements(movies);
     }
 }

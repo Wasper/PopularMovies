@@ -2,25 +2,39 @@ package pl.wasper.popularmovies;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import java.net.URL;
+import java.util.ArrayList;
+
+import pl.wasper.popularmovies.adapter.ListAdapter;
+import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.URLBuilder;
+import pl.wasper.popularmovies.task.ListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
 
-public class ListActivity extends AppCompatActivity {
+public class ListActivity extends AppCompatActivity implements ListCallback {
 
-    private static final String TOP_RATED_PATH = "top_rated";
-    private static final String POPULAR_PATH = "popular";
     private URL url;
+    private RecyclerView mRecyclerView;
+    private ListAdapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        URL url = URLBuilder.buildUrl(TOP_RATED_PATH);
-        new MoviesListTask().execute(url);
+        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new GridLayoutManager(this, 2);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mAdapter = new ListAdapter();
+        mRecyclerView.setAdapter(mAdapter);
+
+        sortByTopRated();
     }
 
     @Override
@@ -46,12 +60,18 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void sortByPopular() {
-        url = URLBuilder.buildUrl(POPULAR_PATH);
-        new MoviesListTask().execute(url);
+        url = URLBuilder.buildUrl(URLBuilder.POPULAR_PATH);
+        new MoviesListTask(this).execute(url);
     }
 
     public void sortByTopRated() {
-        url = URLBuilder.buildUrl(TOP_RATED_PATH);
-        new MoviesListTask().execute(url);
+        url = URLBuilder.buildUrl(URLBuilder.TOP_RATED_PATH);
+        new MoviesListTask(this).execute(url);
+    }
+
+    @Override
+    public void adaptElements(ArrayList<Movie> movies) {
+        mAdapter.setMoviesList(movies);
+        mRecyclerView.setAdapter(mAdapter);
     }
 }

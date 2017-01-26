@@ -33,7 +33,6 @@ public class JSONParser {
             Movie movie = new Movie(element.getInt("id"));
             movie.setTitle(element.getString("title"));
             movie.setOrginalTitle(element.getString("original_title"));
-            movie.setOrginalTitle(element.getString("original_title"));
 
             try {
                 movie.setReleaseDate(formatter.parse(element.getString("release_date")));
@@ -43,6 +42,7 @@ public class JSONParser {
 
             movie.setVoteAverage(element.getDouble("vote_average"));
             movie.setOverview(element.getString("overview"));
+            movie.setPosterPath(element.getString("poster_path"));
 
             movieList.add(movie);
         }
