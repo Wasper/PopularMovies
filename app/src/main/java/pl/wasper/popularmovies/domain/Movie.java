@@ -1,12 +1,15 @@
 package pl.wasper.popularmovies.domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 
 /**
  * Created by wasper on 25.01.17.
  */
 
-public class Movie {
+public class Movie implements Parcelable {
     private int id;
     private String title;
     private String orginalTitle;
@@ -18,6 +21,40 @@ public class Movie {
     public Movie(int id) {
         this.id = id;
     }
+
+    protected Movie(Parcel in) {
+        id = in.readInt();
+        title = in.readString();
+        orginalTitle = in.readString();
+        posterPath = in.readString();
+        overview = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(title);
+        dest.writeString(orginalTitle);
+        dest.writeString(posterPath);
+        dest.writeString(overview);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 
     public int getId() {
         return id;

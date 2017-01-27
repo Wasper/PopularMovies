@@ -1,9 +1,11 @@
 package pl.wasper.popularmovies;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,11 +18,15 @@ import pl.wasper.popularmovies.network.URLBuilder;
 import pl.wasper.popularmovies.task.ListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
 
-public class ListActivity extends AppCompatActivity implements ListCallback {
+public class ListActivity extends AppCompatActivity
+    implements ListCallback, ListAdapter.ListItemClickListener {
+
+    private static final String SORT_KEY = "sort_type";
 
     private URL url;
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
+    private String currentSortType = URLBuilder.TOP_RATED_PATH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,25 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
         setContentView(R.layout.activity_list);
 
         prepareRecyclerView();
-        sortByTopRated();
+        Log.d("TEST", "TEST");
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString(SORT_KEY, currentSortType);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.getString(SORT_KEY) != null)
+            currentSortType = savedInstanceState.getString(SORT_KEY);
+
+        /** not in onCreate() because it's called after onStart() */
+        prepareListSortedBy(currentSortType);
     }
 
     @Override
@@ -43,12 +67,14 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
 
         switch (item.getItemId()) {
             case R.id.top_rated_item:
-                sortByTopRated();
+                currentSortType = URLBuilder.TOP_RATED_PATH;
                 break;
             case R.id.most_popular_item:
-                sortByPopular();
+                currentSortType = URLBuilder.POPULAR_PATH;
                 break;
         }
+
+        prepareListSortedBy(currentSortType);
 
         return super.onOptionsItemSelected(item);
     }
@@ -59,13 +85,8 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    public void sortByPopular() {
-        url = URLBuilder.buildUrl(URLBuilder.POPULAR_PATH);
-        new MoviesListTask(this).execute(url);
-    }
-
-    public void sortByTopRated() {
-        url = URLBuilder.buildUrl(URLBuilder.TOP_RATED_PATH);
+    public void prepareListSortedBy(String sortType) {
+        url = URLBuilder.buildUrl(sortType);
         new MoviesListTask(this).execute(url);
     }
 
@@ -76,7 +97,15 @@ public class ListActivity extends AppCompatActivity implements ListCallback {
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ListAdapter();
+        mAdapter = new ListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onListItemClick(Movie movie) {
+        Intent intent = new Intent(this, DetailsActivity.class);
+        intent.putExtra("Movie", movie);
+
+        startActivity(intent);
     }
 }

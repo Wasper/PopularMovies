@@ -21,23 +21,14 @@ import pl.wasper.popularmovies.network.PosterURLBuilder;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private ArrayList<Movie> movies = new ArrayList<Movie>();
+    private ListAdapter.ListItemClickListener mListItemClickListener;
+
+    public ListAdapter(ListItemClickListener listItemClickListener) {
+        mListItemClickListener = listItemClickListener;
+    }
 
     public void setMoviesList(ArrayList<Movie> movies) {
         this.movies = movies;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        public void bind(int position) {
-            ImageView moviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
-
-            Picasso.with(itemView.getContext())
-                .load(PosterURLBuilder.build(movies.get(position).getPosterPath()))
-                .into(moviePoster);
-        }
     }
 
     @Override
@@ -57,5 +48,32 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    public interface ListItemClickListener {
+        void onListItemClick(Movie movie);
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        public ViewHolder(View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        public void bind(int position) {
+            ImageView moviePoster = (ImageView) itemView.findViewById(R.id.movie_poster);
+
+            Picasso.with(itemView.getContext())
+                .load(PosterURLBuilder.build(movies.get(position).getPosterPath()))
+                .into(moviePoster);
+
+            moviePoster.setContentDescription(movies.get(position).getTitle());
+        }
+
+        @Override
+        public void onClick(View v) {
+            mListItemClickListener.onListItemClick(movies.get(getAdapterPosition()));
+        }
     }
 }
