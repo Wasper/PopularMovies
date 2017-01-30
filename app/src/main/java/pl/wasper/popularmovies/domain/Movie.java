@@ -3,8 +3,6 @@ package pl.wasper.popularmovies.domain;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 /**
  * Created by wasper on 25.01.17.
  */
@@ -13,7 +11,7 @@ public class Movie implements Parcelable {
     private int id;
     private String title;
     private String orginalTitle;
-    private Date releaseDate;
+    private String releaseDate;
     private String posterPath;
     private Double voteAverage;
     private String overview;
@@ -28,6 +26,8 @@ public class Movie implements Parcelable {
         orginalTitle = in.readString();
         posterPath = in.readString();
         overview = in.readString();
+        releaseDate = in.readString();
+        voteAverage = in.readDouble();
     }
 
     @Override
@@ -37,6 +37,8 @@ public class Movie implements Parcelable {
         dest.writeString(orginalTitle);
         dest.writeString(posterPath);
         dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeDouble(voteAverage);
     }
 
     @Override
@@ -76,11 +78,11 @@ public class Movie implements Parcelable {
         this.orginalTitle = orginalTitle;
     }
 
-    public Date getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(Date releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 

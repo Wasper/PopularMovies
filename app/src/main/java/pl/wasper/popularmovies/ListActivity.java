@@ -1,11 +1,11 @@
 package pl.wasper.popularmovies;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -22,36 +22,21 @@ public class ListActivity extends AppCompatActivity
     implements ListCallback, ListAdapter.ListItemClickListener {
 
     private static final String SORT_KEY = "sort_type";
-
-    private URL url;
+    private static final String PREFERENCES_NAME = "app_preferences";
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
     private String currentSortType = URLBuilder.TOP_RATED_PATH;
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        preferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
+        loadSortType();
+
         prepareRecyclerView();
-        Log.d("TEST", "TEST");
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString(SORT_KEY, currentSortType);
-
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        if (savedInstanceState.getString(SORT_KEY) != null)
-            currentSortType = savedInstanceState.getString(SORT_KEY);
-
-        /** not in onCreate() because it's called after onStart() */
         prepareListSortedBy(currentSortType);
     }
 
@@ -74,9 +59,20 @@ public class ListActivity extends AppCompatActivity
                 break;
         }
 
+        saveSortType(currentSortType);
         prepareListSortedBy(currentSortType);
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void saveSortType(String currentSortType) {
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(SORT_KEY, currentSortType);
+        editor.apply();
+    }
+
+    private void loadSortType() {
+        currentSortType = preferences.getString(SORT_KEY, currentSortType);
     }
 
     @Override
@@ -86,7 +82,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     public void prepareListSortedBy(String sortType) {
-        url = URLBuilder.buildUrl(sortType);
+        URL url = URLBuilder.buildUrl(sortType);
         new MoviesListTask(this).execute(url);
     }
 
