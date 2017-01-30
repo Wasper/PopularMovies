@@ -26,6 +26,8 @@ public class ListActivity extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private ListAdapter mAdapter;
     private String currentSortType = URLBuilder.TOP_RATED_PATH;
+
+    /** I used it because i want to save sort type when user back from detail activity */
     private SharedPreferences preferences;
 
     @Override

@@ -13,6 +13,15 @@ import pl.wasper.popularmovies.domain.Movie;
  */
 
 public class JSONParser {
+    private static final String TAG_RESULTS = "results";
+    private static final String TAG_ID = "id";
+    private static final String TAG_TITLE = "title";
+    private static final String TAG_ORIGINAL_TITLE = "original_title";
+    private static final String TAG_RELEASE_DATE = "release_date";
+    private static final String TAG_VOTE_AVERAGE = "vote_average";
+    private static final String TAG_OVERVIEW = "overview";
+    private static final String TAG_POSTER_PATH = "poster_path";
+
     private String jsonString;
 
     public JSONParser(String jsonString) {
@@ -23,19 +32,19 @@ public class JSONParser {
         ArrayList<Movie> movieList = new ArrayList<Movie>();
 
         JSONObject object = new JSONObject(jsonString);
-        JSONArray results = object.getJSONArray("results");
+        JSONArray results = object.getJSONArray(TAG_RESULTS);
 
         for (int i = 0; i < results.length(); i++) {
             JSONObject element = results.getJSONObject(i);
 
-            Movie movie = new Movie(element.getInt("id"));
-            movie.setTitle(element.getString("title"));
-            movie.setOrginalTitle(element.getString("original_title"));
-            movie.setReleaseDate(element.getString("release_date"));
+            Movie movie = new Movie(element.getInt(TAG_ID));
+            movie.setTitle(element.getString(TAG_TITLE));
+            movie.setOrginalTitle(element.getString(TAG_ORIGINAL_TITLE));
+            movie.setReleaseDate(element.getString(TAG_RELEASE_DATE));
 
-            movie.setVoteAverage(element.getDouble("vote_average"));
-            movie.setOverview(element.getString("overview"));
-            movie.setPosterPath(element.getString("poster_path"));
+            movie.setVoteAverage(element.getDouble(TAG_VOTE_AVERAGE));
+            movie.setOverview(element.getString(TAG_OVERVIEW));
+            movie.setPosterPath(element.getString(TAG_POSTER_PATH));
 
             movieList.add(movie);
         }
