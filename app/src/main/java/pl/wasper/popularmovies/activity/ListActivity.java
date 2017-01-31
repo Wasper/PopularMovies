@@ -1,4 +1,4 @@
-package pl.wasper.popularmovies;
+package pl.wasper.popularmovies.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import java.net.URL;
 import java.util.ArrayList;
 
+import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.adapter.ListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.URLBuilder;

@@ -1,4 +1,4 @@
-package pl.wasper.popularmovies;
+package pl.wasper.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
 
