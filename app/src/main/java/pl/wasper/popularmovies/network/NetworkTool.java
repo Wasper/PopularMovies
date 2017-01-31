@@ -11,7 +11,7 @@ import java.util.Scanner;
  */
 
 public class NetworkTool {
-    public static String getUrlResponse(URL url) throws IOException {
+    public static String getUrlResponse(URL url) {
         HttpURLConnection connection = null;
         String result = null;
 
@@ -20,6 +20,8 @@ public class NetworkTool {
             InputStream stream = connection.getInputStream();
 
             result = convertStreamToString(stream);
+        } catch (IOException e) {
+            return null;
         } finally {
             if (connection != null) {
                 connection.disconnect();

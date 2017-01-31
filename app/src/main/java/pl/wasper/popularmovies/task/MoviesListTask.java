@@ -1,10 +1,12 @@
 package pl.wasper.popularmovies.task;
 
 import android.os.AsyncTask;
+
 import org.json.JSONException;
-import java.io.IOException;
+
 import java.net.URL;
 import java.util.ArrayList;
+
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.NetworkTool;
 import pl.wasper.popularmovies.parser.JSONParser;
@@ -13,7 +15,7 @@ import pl.wasper.popularmovies.parser.JSONParser;
  * Created by wasper on 25.01.17.
  */
 
-public class MoviesListTask extends AsyncTask<URL, Void, String> {
+public class MoviesListTask extends AsyncTask<URL, Void, ArrayList<Movie>> {
     private ListCallback mListCallback;
 
     public MoviesListTask(ListCallback listCallback) {
@@ -21,31 +23,41 @@ public class MoviesListTask extends AsyncTask<URL, Void, String> {
     }
 
     @Override
-    protected String doInBackground(URL... params) {
+    protected ArrayList<Movie> doInBackground(URL... params) {
         URL url = params[0];
-        String response = null;
+        ArrayList<Movie> movies = new ArrayList<Movie>();
+        String response = NetworkTool.getUrlResponse(url);
 
-        try {
-            response = NetworkTool.getUrlResponse(url);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (response == null) {
+            return null;
         }
 
-        return response;
-    }
-
-    @Override
-    protected void onPostExecute(String jsonMovies) {
-
-        JSONParser parser = new JSONParser(jsonMovies);
-        ArrayList<Movie> movies = new ArrayList<Movie>();
-
         try {
-            movies = parser.parse();
+            movies = JSONParser.parse(response);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        mListCallback.adaptElements(movies);
+        return movies;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        mListCallback.showProgressBar();
+    }
+
+    @Override
+    protected void onPostExecute(ArrayList<Movie> movies) {
+        mListCallback.hideProgressBar();
+
+        if (movies == null) {
+            mListCallback.showConnectError();
+        } else if (movies.isEmpty()) {
+            mListCallback.showParseError();
+        } else {
+            mListCallback.adaptElements(movies);
+        }
     }
 }

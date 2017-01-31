@@ -22,13 +22,8 @@ public class JSONParser {
     private static final String TAG_OVERVIEW = "overview";
     private static final String TAG_POSTER_PATH = "poster_path";
 
-    private String jsonString;
 
-    public JSONParser(String jsonString) {
-        this.jsonString = jsonString;
-    }
-
-    public ArrayList<Movie> parse() throws JSONException {
+    public static ArrayList<Movie> parse(String jsonString) throws JSONException {
         ArrayList<Movie> movieList = new ArrayList<Movie>();
 
         JSONObject object = new JSONObject(jsonString);

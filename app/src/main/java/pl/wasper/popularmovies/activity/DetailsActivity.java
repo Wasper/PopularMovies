@@ -26,7 +26,7 @@ public class DetailsActivity extends AppCompatActivity {
         TextView overview = (TextView) findViewById(R.id.movie_overview);
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra("Movie");
+        Movie movie = intent.getParcelableExtra(ListActivity.INTENT_EXTRA_KEY);
 
         title.setText(movie.getTitle());
 

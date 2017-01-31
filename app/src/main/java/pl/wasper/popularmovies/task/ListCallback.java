@@ -8,5 +8,9 @@ import pl.wasper.popularmovies.domain.Movie;
  */
 
 public interface ListCallback {
-    public void adaptElements(ArrayList<Movie> movies);
+    void adaptElements(ArrayList<Movie> movies);
+    void showConnectError();
+    void showParseError();
+    void showProgressBar();
+    void hideProgressBar();
 }
