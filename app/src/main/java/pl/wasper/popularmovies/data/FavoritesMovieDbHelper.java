@@ -14,8 +14,9 @@ public class FavoritesMovieDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE = "CREATE TABLE " +
         FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME + " (" +
-        FavoritesMovieContract.WaitlistMovieEntry._ID + " INTEGER PRIMARY KEY," +
-        FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_TITLE + " TEXT)";
+        FavoritesMovieContract.WaitlistMovieEntry._ID + " INTEGER PRIMARY KEY, " +
+        FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL, " +
+        FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_MOVIE_ID + " INTEGER NOT NULL);";
 
     private static final String SQL_DELETE = "DROP TABLE IF EXISTS " +
         FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME;

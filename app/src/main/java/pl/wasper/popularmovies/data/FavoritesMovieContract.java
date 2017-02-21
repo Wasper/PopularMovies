@@ -15,5 +15,6 @@ public final class FavoritesMovieContract {
     public final class WaitlistMovieEntry implements BaseColumns {
         public static final String TABLE_NAME = "favoriteMovie";
         public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_MOVIE_ID = "movieId";
     }
 }
