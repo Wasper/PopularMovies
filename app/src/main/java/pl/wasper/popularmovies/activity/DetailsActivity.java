@@ -62,7 +62,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         hasRecord = hasRecord(movie.getId());
 
-        if (hasRecord != null && hasRecord) {
+        if (hasRecord) {
             favorites.setText(getText(R.string.remove_from_favorites));
         }
     }
@@ -74,8 +74,6 @@ public class DetailsActivity extends AppCompatActivity {
     public void addOrRemoveRecord(View view) {
         int id = movie.getId();
         String title = movie.getTitle();
-
-
 
         if (!hasRecord) {
             addRecord(id, title);
@@ -115,14 +113,8 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private Boolean hasRecord(int movieId) {
-        Cursor movieRecord = getRecord(movieId);
-
-        if (movieRecord != null) {
-            return movieRecord.getCount() > 0;
-        } else {
-            return null;
-        }
+    private boolean hasRecord(int movieId) {
+        return getRecord(movieId).getCount() > 0;
     }
 
     private Uri addRecord(int movieId, String title) {
