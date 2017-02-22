@@ -3,7 +3,7 @@ package pl.wasper.popularmovies.activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
-import pl.wasper.popularmovies.data.FavoritesMovieDbHelper;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
 
@@ -27,21 +26,15 @@ public class DetailsActivity extends AppCompatActivity {
     private TextView voteAverage;
     private TextView overview;
     private ImageView moviePoster;
-
     private Button favorites;
 
     private Movie movie;
-
-    private FavoritesMovieDbHelper mDbHelper;
-    private SQLiteDatabase db;
+    private Boolean hasRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details);
-
-        mDbHelper = new FavoritesMovieDbHelper(this);
-        db = mDbHelper.getWritableDatabase();
 
         title = (TextView) findViewById(R.id.movie_title);
         originalTitle = (TextView) findViewById(R.id.movie_original_title);
@@ -53,6 +46,11 @@ public class DetailsActivity extends AppCompatActivity {
         movie = intent.getParcelableExtra(ListActivity.INTENT_EXTRA_KEY);
 
         title.setText(movie.getTitle());
+        originalTitle.setText(movie.getOrginalTitle());
+        releaseDate.setText(movie.getReleaseDate());
+        voteAverage.setText(buildVoteAverage(movie));
+        overview.setText(movie.getOverview());
+        favorites = (Button) findViewById(R.id.favorites_button);
 
         moviePoster = (ImageView) findViewById(R.id.details_movie_poster);
 
@@ -60,23 +58,13 @@ public class DetailsActivity extends AppCompatActivity {
             .load(PosterURLBuilder.build(movie.getPosterPath()))
             .into(moviePoster);
 
-        originalTitle.setText(movie.getOrginalTitle());
-        releaseDate.setText(movie.getReleaseDate());
-        voteAverage.setText(buildVoteAverage(movie));
-        overview.setText(movie.getOverview());
 
 
-        favorites = (Button) findViewById(R.id.favorites_button);
+        hasRecord = hasRecord(movie.getId());
 
-        if (favoriteMovieExists(db, movie.getId())) {
+        if (hasRecord != null && hasRecord) {
             favorites.setText(getText(R.string.remove_from_favorites));
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        mDbHelper.close();
-        super.onDestroy();
     }
 
     private String buildVoteAverage(Movie movie) {
@@ -87,12 +75,16 @@ public class DetailsActivity extends AppCompatActivity {
         int id = movie.getId();
         String title = movie.getTitle();
 
-        if (!favoriteMovieExists(db, id)) {
-            addRecord(db, id, title);
+
+
+        if (!hasRecord) {
+            addRecord(id, title);
             prepareActiveButton();
+            hasRecord = true;
         } else {
-            removeRecord(db, id);
+            removeRecord(id);
             preprareInactiveButton();
+            hasRecord = false;
         }
     }
 
@@ -106,38 +98,54 @@ public class DetailsActivity extends AppCompatActivity {
         favorites.setText(getText(R.string.remove_from_favorites));
     }
 
-    private boolean favoriteMovieExists(SQLiteDatabase db, int movieId) {
-        String selection = FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_MOVIE_ID + " = ?";
-        String[] selectionArgs = new String[] { String.valueOf(movieId) };
+    private Cursor getRecord(int movieId) {
 
-        boolean isAdded;
-
-        Cursor data = db.query(
-            FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME,
-            null,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null);
-
-        isAdded = data.getCount() > 0;
-
-        data.close();
-
-        return isAdded;
+        try {
+            return getContentResolver().query(
+                buildContentUriWithId(movieId),
+                null,
+                null,
+                null,
+                null
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+            //TODO (1) obsluzyc wyjatek bledu sql
+        }
     }
 
-    private long addRecord(SQLiteDatabase db, int movieId, String title) {
+    private Boolean hasRecord(int movieId) {
+        Cursor movieRecord = getRecord(movieId);
+
+        if (movieRecord != null) {
+            return movieRecord.getCount() > 0;
+        } else {
+            return null;
+        }
+    }
+
+    private Uri addRecord(int movieId, String title) {
         ContentValues values = new ContentValues();
-        values.put(FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_TITLE, title);
-        values.put(FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_MOVIE_ID, movieId);
+        values.put(FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_TITLE, title);
+        values.put(FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_MOVIE_ID, movieId);
 
-        return db.insert(FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME, null, values);
+        return getContentResolver().insert(
+            FavoritesMovieContract.FavoriteMovieEntry.CONTENT_URI,
+            values
+        );
+
+        //TODO (2) obsluzyc wyjatek bledu przy zapisie
     }
 
-    private int removeRecord(SQLiteDatabase db, int movieId) {
-        return db.delete(FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME,
-            FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_MOVIE_ID + "=" + movieId, null);
+    private int removeRecord(int movieId) {
+        return getContentResolver().delete(buildContentUriWithId(movieId), null, null);
+    }
+
+    private Uri buildContentUriWithId(int movieId) {
+        return FavoritesMovieContract.FavoriteMovieEntry.CONTENT_URI
+            .buildUpon()
+            .appendPath(String.valueOf(movieId))
+            .build();
     }
 }

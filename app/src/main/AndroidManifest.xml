@@ -24,6 +24,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.ListActivity" />
         </activity>
+
+        <provider
+            android:authorities="pl.wasper.popularmovies"
+            android:name="pl.wasper.popularmovies.data.FavoriteMovieContentProvider"
+            android:exported="false" />
     </application>
 
 </manifest>

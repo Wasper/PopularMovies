@@ -13,13 +13,13 @@ public class FavoritesMovieDbHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "FavoritesMovie.db";
 
     private static final String SQL_CREATE = "CREATE TABLE " +
-        FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME + " (" +
-        FavoritesMovieContract.WaitlistMovieEntry._ID + " INTEGER PRIMARY KEY, " +
-        FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL, " +
-        FavoritesMovieContract.WaitlistMovieEntry.COLUMN_NAME_MOVIE_ID + " INTEGER NOT NULL);";
+        FavoritesMovieContract.FavoriteMovieEntry.TABLE_NAME + " (" +
+        FavoritesMovieContract.FavoriteMovieEntry._ID + " INTEGER PRIMARY KEY, " +
+        FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_TITLE + " TEXT NOT NULL, " +
+        FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_MOVIE_ID + " INTEGER NOT NULL);";
 
     private static final String SQL_DELETE = "DROP TABLE IF EXISTS " +
-        FavoritesMovieContract.WaitlistMovieEntry.TABLE_NAME;
+        FavoritesMovieContract.FavoriteMovieEntry.TABLE_NAME;
 
     public FavoritesMovieDbHelper(Context context) {
         super(context, DATABASE_NAME, null, VERSION);
