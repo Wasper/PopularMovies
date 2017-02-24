@@ -11,4 +11,5 @@
     <string name="added_toast">Movie added to favorites</string>
     <string name="removed_toast">Movie removed from favorites</string>
     <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="favorites">Favorites</string>
 </resources>
