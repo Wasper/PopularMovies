@@ -16,14 +16,15 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import pl.wasper.popularmovies.R;
+import pl.wasper.popularmovies.adapter.IListItemClickListener;
 import pl.wasper.popularmovies.adapter.ListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.URLBuilder;
-import pl.wasper.popularmovies.task.ListCallback;
+import pl.wasper.popularmovies.task.IListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
 
 public class ListActivity extends AppCompatActivity
-    implements ListCallback, ListAdapter.ListItemClickListener {
+    implements IListCallback, IListItemClickListener {
 
     public static final String INTENT_EXTRA_KEY = "Movie";
     private static final String SORT_KEY = "sort_type";
@@ -66,6 +67,8 @@ public class ListActivity extends AppCompatActivity
                 break;
             case R.id.most_popular_item:
                 currentSortType = URLBuilder.POPULAR_PATH;
+                break;
+            case R.id.favorites_item:
                 break;
         }
 

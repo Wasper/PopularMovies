@@ -29,7 +29,7 @@ public class DetailsActivity extends AppCompatActivity {
     private Button favorites;
 
     private Movie movie;
-    private Boolean hasRecord;
+    private boolean hasRecord;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
