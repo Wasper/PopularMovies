@@ -25,7 +25,13 @@ public final class FavoritesMovieContract {
             .build();
 
         public static final String TABLE_NAME = "favoriteMovie";
-        public static final String COLUMN_NAME_TITLE = "title";
+
         public static final String COLUMN_NAME_MOVIE_ID = "movieId";
+        public static final String COLUMN_NAME_TITLE = "title";
+        public static final String COLUMN_NAME_POSTER_PATH = "posterPath";
+        public static final String COLUMN_NAME_ORIGINAL_TITLE = "originalTitle";
+        public static final String COLUMN_NAME_RELEASE_DATE = "releaseDate";
+        public static final String COLUMN_NAME_VOTE_AVERAGE = "voteAverage";
+        public static final String COLUMN_NAME_OVERVIEW = "overview";
     }
 }
