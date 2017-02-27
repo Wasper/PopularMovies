@@ -139,7 +139,7 @@ public class ListActivity extends AppCompatActivity
         switch (currentSortType) {
             case TOP_RATED:
             case POPULAR:
-                URL url = URLBuilder.buildUrl(currentSortType);
+                URL url = URLBuilder.buildSortedListUrl(currentSortType);
 
                 if (url == null) {
                     showApiKeyError();
