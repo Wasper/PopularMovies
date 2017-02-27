@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import pl.wasper.popularmovies.R;
+import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
@@ -60,7 +61,7 @@ public class DetailsActivity extends AppCompatActivity {
 
 
 
-        hasRecord = hasRecord(movie.getId());
+        hasRecord = hasRecord(movie);
 
         if (hasRecord) {
             favorites.setText(getText(R.string.remove_from_favorites));
@@ -76,11 +77,11 @@ public class DetailsActivity extends AppCompatActivity {
         String title = movie.getTitle();
 
         if (!hasRecord) {
-            addRecord(id, title);
+            addRecord(movie);
             prepareActiveButton();
             hasRecord = true;
         } else {
-            removeRecord(id);
+            removeRecord(movie);
             preprareInactiveButton();
             hasRecord = false;
         }
@@ -96,11 +97,11 @@ public class DetailsActivity extends AppCompatActivity {
         favorites.setText(getText(R.string.remove_from_favorites));
     }
 
-    private Cursor getRecord(int movieId) {
+    private Cursor getRecord(Movie movie) {
 
         try {
             return getContentResolver().query(
-                buildContentUriWithId(movieId),
+                buildContentUriWithId(movie.getId()),
                 null,
                 null,
                 null,
@@ -113,25 +114,21 @@ public class DetailsActivity extends AppCompatActivity {
         }
     }
 
-    private boolean hasRecord(int movieId) {
-        return getRecord(movieId).getCount() > 0;
+    private boolean hasRecord(Movie movie) {
+        return getRecord(movie).getCount() > 0;
     }
 
-    private Uri addRecord(int movieId, String title) {
-        ContentValues values = new ContentValues();
-        values.put(FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_TITLE, title);
-        values.put(FavoritesMovieContract.FavoriteMovieEntry.COLUMN_NAME_MOVIE_ID, movieId);
+    private Uri addRecord(Movie movie) {
+        ContentValues values = MoviesConverter.singleToContentValues(movie);
 
         return getContentResolver().insert(
             FavoritesMovieContract.FavoriteMovieEntry.CONTENT_URI,
             values
         );
-
-        //TODO (2) obsluzyc wyjatek bledu przy zapisie
     }
 
-    private int removeRecord(int movieId) {
-        return getContentResolver().delete(buildContentUriWithId(movieId), null, null);
+    private int removeRecord(Movie movie) {
+        return getContentResolver().delete(buildContentUriWithId(movie.getId()), null, null);
     }
 
     private Uri buildContentUriWithId(int movieId) {

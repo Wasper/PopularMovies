@@ -1,5 +1,6 @@
 package pl.wasper.popularmovies.converter;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 
 import org.json.JSONArray;
@@ -30,9 +31,9 @@ public class MoviesConverter {
         ArrayList<Movie> movies = new ArrayList<Movie>();
 
         if (cursor.getCount() > 0 && cursor.moveToFirst()) {
-            while(cursor.moveToNext()) {
+            do {
                 movies.add(singleFromCursor(cursor));
-            }
+            } while (cursor.moveToNext());
         }
 
         return movies;
@@ -105,7 +106,21 @@ public class MoviesConverter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        
+
         return movieList;
+    }
+
+    public static ContentValues singleToContentValues(Movie movie) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_MOVIE_ID, movie.getId());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_TITLE, movie.getTitle());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_ORIGINAL_TITLE, movie.getOrginalTitle());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_RELEASE_DATE, movie.getReleaseDate());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_VOTE_AVERAGE, movie.getVoteAverage());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_OVERVIEW, movie.getOverview());
+        contentValues.put(FavoriteMovieEntry.COLUMN_NAME_POSTER_PATH, movie.getPosterPath());
+
+        return contentValues;
     }
 }

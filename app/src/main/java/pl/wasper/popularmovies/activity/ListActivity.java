@@ -19,9 +19,15 @@ import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.adapter.IListItemClickListener;
 import pl.wasper.popularmovies.adapter.ListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
+import pl.wasper.popularmovies.domain.SortType;
 import pl.wasper.popularmovies.network.URLBuilder;
+import pl.wasper.popularmovies.task.FavoriteMoviesListTask;
 import pl.wasper.popularmovies.task.IListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
+
+import static pl.wasper.popularmovies.domain.SortType.FAVORITES;
+import static pl.wasper.popularmovies.domain.SortType.POPULAR;
+import static pl.wasper.popularmovies.domain.SortType.TOP_RATED;
 
 public class ListActivity extends AppCompatActivity
     implements IListCallback, IListItemClickListener {
@@ -34,9 +40,8 @@ public class ListActivity extends AppCompatActivity
     private TextView mError;
     private ProgressBar progressBar;
     private ListAdapter mAdapter;
-    private String currentSortType = URLBuilder.TOP_RATED_PATH;
+    private SortType currentSortType = TOP_RATED;
 
-    /** I used it because i want to save sort type when user back from detail activity */
     private SharedPreferences preferences;
 
     @Override
@@ -48,7 +53,7 @@ public class ListActivity extends AppCompatActivity
         loadSortType();
 
         prepareRecyclerView();
-        prepareListSortedBy(currentSortType);
+        prepareList();
     }
 
     @Override
@@ -63,29 +68,33 @@ public class ListActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.top_rated_item:
-                currentSortType = URLBuilder.TOP_RATED_PATH;
+                currentSortType = TOP_RATED;
                 break;
             case R.id.most_popular_item:
-                currentSortType = URLBuilder.POPULAR_PATH;
+                currentSortType = POPULAR;
                 break;
             case R.id.favorites_item:
+                currentSortType = FAVORITES;
                 break;
         }
 
-        saveSortType(currentSortType);
-        prepareListSortedBy(currentSortType);
+        saveSortType();
+        prepareList();
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveSortType(String currentSortType) {
+    private void saveSortType() {
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString(SORT_KEY, currentSortType);
+        editor.putString(SORT_KEY, currentSortType.toString());
         editor.apply();
     }
 
     private void loadSortType() {
-        currentSortType = preferences.getString(SORT_KEY, currentSortType);
+        currentSortType = SortType.valueOf(preferences.getString(
+                SORT_KEY,
+                currentSortType.toString()
+        ));
     }
 
     @Override
@@ -126,13 +135,21 @@ public class ListActivity extends AppCompatActivity
         mError.setVisibility(View.VISIBLE);
     }
 
-    public void prepareListSortedBy(String sortType) {
-        URL url = URLBuilder.buildUrl(sortType);
+    public void prepareList() {
+        switch (currentSortType) {
+            case TOP_RATED:
+            case POPULAR:
+                URL url = URLBuilder.buildUrl(currentSortType);
 
-        if (url == null) {
-            showApiKeyError();
-        } else {
-            new MoviesListTask(this).execute(url);
+                if (url == null) {
+                    showApiKeyError();
+                } else {
+                    new MoviesListTask(this).execute(url);
+                }
+                break;
+            case FAVORITES:
+                new FavoriteMoviesListTask(this).execute();
+                break;
         }
     }
 

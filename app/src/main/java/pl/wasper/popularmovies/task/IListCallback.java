@@ -1,7 +1,5 @@
 package pl.wasper.popularmovies.task;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 
 import pl.wasper.popularmovies.domain.Movie;
@@ -12,7 +10,6 @@ import pl.wasper.popularmovies.domain.Movie;
 
 public interface IListCallback {
     void adaptElements(ArrayList<Movie> movies);
-    Context getApplicationContext();
     void showConnectError();
     void showParseError();
     void showProgressBar();
