@@ -3,6 +3,7 @@ package pl.wasper.popularmovies.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +16,12 @@ import android.widget.TextView;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindBool;
+import butterknife.BindInt;
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import pl.wasper.popularmovies.R;
+import pl.wasper.popularmovies.activity.fragment.DetailsFragment;
 import pl.wasper.popularmovies.adapter.IListItemClickListener;
 import pl.wasper.popularmovies.adapter.ListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
@@ -26,22 +31,21 @@ import pl.wasper.popularmovies.task.FavoriteMoviesListTask;
 import pl.wasper.popularmovies.task.IListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
 
-import static pl.wasper.popularmovies.domain.SortType.FAVORITES;
-import static pl.wasper.popularmovies.domain.SortType.POPULAR;
-import static pl.wasper.popularmovies.domain.SortType.TOP_RATED;
-
 public class ListActivity extends AppCompatActivity
     implements IListCallback, IListItemClickListener {
 
-    public static final String INTENT_EXTRA_KEY = "Movie";
+    public static final String MOVIE_EXTRA_KEY = "Movie";
     private static final String SORT_KEY = "sort_type";
     private static final String PREFERENCES_NAME = "app_preferences";
 
     @BindView(R.id.list_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.error) TextView mError;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
+    @BindInt(R.integer.column_count) int columnCount;
+    @BindBool(R.bool.use_tablet_view) boolean useTabletView;
+
     private ListAdapter mAdapter;
-    private SortType currentSortType = TOP_RATED;
+    private SortType currentSortType = SortType.TOP_RATED;
 
     private SharedPreferences preferences;
 
@@ -49,6 +53,7 @@ public class ListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        ButterKnife.bind(this);
 
         preferences = getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         loadSortType();
@@ -69,13 +74,13 @@ public class ListActivity extends AppCompatActivity
 
         switch (item.getItemId()) {
             case R.id.top_rated_item:
-                currentSortType = TOP_RATED;
+                currentSortType = SortType.TOP_RATED;
                 break;
             case R.id.most_popular_item:
-                currentSortType = POPULAR;
+                currentSortType = SortType.POPULAR;
                 break;
             case R.id.favorites_item:
-                currentSortType = FAVORITES;
+                currentSortType = SortType.FAVORITES;
                 break;
         }
 
@@ -157,7 +162,7 @@ public class ListActivity extends AppCompatActivity
     private void prepareRecyclerView() {
         mRecyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, columnCount);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new ListAdapter(this);
@@ -166,9 +171,23 @@ public class ListActivity extends AppCompatActivity
 
     @Override
     public void onListItemClick(Movie movie) {
-        Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(INTENT_EXTRA_KEY, movie);
+        if (useTabletView) {
+            Bundle bundle = new Bundle();
+            bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
 
-        startActivity(intent);
+            Fragment detailFragment = new DetailsFragment();
+            detailFragment.setArguments(bundle);
+
+            getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.details_fragment, detailFragment)
+                .commit();
+
+        } else {
+            Intent intent = new Intent(this, DetailsActivity.class);
+            intent.putExtra(MOVIE_EXTRA_KEY, movie);
+
+            startActivity(intent);
+        }
     }
 }
