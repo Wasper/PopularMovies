@@ -15,6 +15,7 @@ import android.widget.TextView;
 import java.net.URL;
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.adapter.IListItemClickListener;
 import pl.wasper.popularmovies.adapter.ListAdapter;
@@ -36,9 +37,9 @@ public class ListActivity extends AppCompatActivity
     private static final String SORT_KEY = "sort_type";
     private static final String PREFERENCES_NAME = "app_preferences";
 
-    private RecyclerView mRecyclerView;
-    private TextView mError;
-    private ProgressBar progressBar;
+    @BindView(R.id.list_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.error) TextView mError;
+    @BindView(R.id.progress_bar) ProgressBar progressBar;
     private ListAdapter mAdapter;
     private SortType currentSortType = TOP_RATED;
 
@@ -154,11 +155,7 @@ public class ListActivity extends AppCompatActivity
     }
 
     private void prepareRecyclerView() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_recycler_view);
         mRecyclerView.setHasFixedSize(true);
-
-        mError = (TextView) findViewById(R.id.error);
-        progressBar = (ProgressBar) findViewById(R.id.progress_bar);
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
         mRecyclerView.setLayoutManager(mLayoutManager);
