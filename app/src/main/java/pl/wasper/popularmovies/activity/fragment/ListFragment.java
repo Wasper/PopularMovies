@@ -57,6 +57,12 @@ public class ListFragment extends Fragment
     private SortType currentSortType = SortType.TOP_RATED;
     private SharedPreferences preferences;
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(
