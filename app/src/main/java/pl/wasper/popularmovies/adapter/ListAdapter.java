@@ -69,7 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            mListItemClickListener.onListItemClick(movies.get(getAdapterPosition()));
+            mListItemClickListener.onListItemClick(v, movies.get(getAdapterPosition()));
         }
     }
 }

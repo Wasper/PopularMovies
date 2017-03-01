@@ -1,5 +1,7 @@
 package pl.wasper.popularmovies.adapter;
 
+import android.view.View;
+
 import pl.wasper.popularmovies.domain.Movie;
 
 /**
@@ -7,5 +9,5 @@ import pl.wasper.popularmovies.domain.Movie;
  */
 
 public interface IListItemClickListener {
-    void onListItemClick(Movie movie);
+    void onListItemClick(View view, Movie movie);
 }

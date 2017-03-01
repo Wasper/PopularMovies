@@ -19,7 +19,6 @@ import com.squareup.picasso.Picasso;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.wasper.popularmovies.R;
-import pl.wasper.popularmovies.activity.ListActivity;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
@@ -58,8 +57,8 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
         favorites.setOnClickListener(this);
 
-        if (getArguments() != null && getArguments().containsKey(ListActivity.MOVIE_EXTRA_KEY)) {
-            movie = getArguments().getParcelable(ListActivity.MOVIE_EXTRA_KEY);
+        if (getArguments() != null && getArguments().containsKey(ListFragment.MOVIE_EXTRA_KEY)) {
+            movie = getArguments().getParcelable(ListFragment.MOVIE_EXTRA_KEY);
             prepareView(view, movie);
         }
 
