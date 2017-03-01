@@ -21,9 +21,9 @@ import pl.wasper.popularmovies.network.PosterURLBuilder;
 
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private ArrayList<Movie> movies = new ArrayList<Movie>();
-    private ListAdapter.ListItemClickListener mListItemClickListener;
+    private IListItemClickListener mListItemClickListener;
 
-    public ListAdapter(ListItemClickListener listItemClickListener) {
+    public ListAdapter(IListItemClickListener listItemClickListener) {
         mListItemClickListener = listItemClickListener;
     }
 
@@ -50,10 +50,6 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return movies.size();
     }
 
-    public interface ListItemClickListener {
-        void onListItemClick(Movie movie);
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ViewHolder(View itemView) {
             super(itemView);
@@ -73,7 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            mListItemClickListener.onListItemClick(movies.get(getAdapterPosition()));
+            mListItemClickListener.onListItemClick(v, movies.get(getAdapterPosition()));
         }
     }
 }

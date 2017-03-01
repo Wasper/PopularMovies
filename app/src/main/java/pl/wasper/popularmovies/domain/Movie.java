@@ -16,8 +16,8 @@ public class Movie implements Parcelable {
     private Double voteAverage;
     private String overview;
 
-    public Movie(int id) {
-        this.id = id;
+    public Movie() {
+
     }
 
     protected Movie(Parcel in) {
@@ -57,6 +57,10 @@ public class Movie implements Parcelable {
             return new Movie[size];
         }
     };
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getId() {
         return id;
