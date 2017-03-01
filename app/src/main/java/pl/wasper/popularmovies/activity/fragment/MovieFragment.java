@@ -31,7 +31,7 @@ public class MovieFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
         ButterKnife.bind(this, view);
 
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
 
         if (!useTabletView) {
             addDetailsFragment(bundle);
@@ -41,7 +41,7 @@ public class MovieFragment extends Fragment {
             mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.reviews_title)));
             mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-            PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager());
+            PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), bundle);
             mViewPager.setAdapter(pagerAdapter);
             mViewPager.addOnPageChangeListener(
                 new TabLayout.TabLayoutOnPageChangeListener(mTabLayout)
