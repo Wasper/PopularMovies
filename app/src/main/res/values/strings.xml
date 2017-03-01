@@ -12,4 +12,7 @@
     <string name="removed_toast">Movie removed from favorites</string>
     <string name="remove_from_favorites">Remove from favorites</string>
     <string name="favorites">Favorites</string>
+    <string name="details_title">Details</string>
+    <string name="trailers_title">Trailers</string>
+    <string name="reviews_title">Reviews</string>
 </resources>

@@ -30,7 +30,7 @@ import pl.wasper.popularmovies.network.PosterURLBuilder;
  * Created by wasper on 28.02.17.
  */
 
-public class DetailsFragment extends Fragment implements View.OnClickListener {
+public class MovieDetailsFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.movie_title) TextView title;
     @BindView(R.id.movie_original_title) TextView originalTitle;
     @BindView(R.id.movie_release_date) TextView releaseDate;
@@ -56,7 +56,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(R.layout.fragment_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, view);
 
         favorites.setOnClickListener(this);

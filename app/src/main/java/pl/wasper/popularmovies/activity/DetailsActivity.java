@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.wasper.popularmovies.R;
-import pl.wasper.popularmovies.activity.fragment.DetailsFragment;
+import pl.wasper.popularmovies.activity.fragment.MovieFragment;
 
 public class DetailsActivity extends AppCompatActivity {
     @Override
@@ -16,12 +16,12 @@ public class DetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
 
-        DetailsFragment detailsFragment = new DetailsFragment();
-        detailsFragment.setArguments(bundle);
+        MovieFragment movieFragment = new MovieFragment();
+        movieFragment.setArguments(bundle);
 
         getSupportFragmentManager().
             beginTransaction()
-            .add(R.id.details_fragment, detailsFragment)
+            .add(R.id.movie_fragment, movieFragment)
             .commit();
 
     }

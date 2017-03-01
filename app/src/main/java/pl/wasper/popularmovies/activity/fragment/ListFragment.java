@@ -118,12 +118,12 @@ public class ListFragment extends Fragment
     }
 
     private void detachDetails() {
-        DetailsFragment detailsFragment =
-            (DetailsFragment) getFragmentManager().findFragmentById(R.id.details_fragment);
+        MovieFragment movieFragment =
+            (MovieFragment) getFragmentManager().findFragmentById(R.id.movie_fragment);
 
         getFragmentManager()
             .beginTransaction()
-            .detach(detailsFragment)
+            .detach(movieFragment)
             .commit();
     }
 
@@ -178,12 +178,12 @@ public class ListFragment extends Fragment
         bundle.putString(SORT_KEY, currentSortType.toString());
 
         if (useTabletView) {
-            Fragment detailFragment = new DetailsFragment();
-            detailFragment.setArguments(bundle);
+            MovieFragment movieFragment = new MovieFragment();
+            movieFragment.setArguments(bundle);
 
             getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.details_fragment, detailFragment)
+                .replace(R.id.movie_fragment, movieFragment)
                 .commit();
         } else {
             Intent intent = new Intent(view.getContext(), DetailsActivity.class);
