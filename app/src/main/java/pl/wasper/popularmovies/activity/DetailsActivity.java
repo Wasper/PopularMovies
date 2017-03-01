@@ -2,7 +2,6 @@ package pl.wasper.popularmovies.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.wasper.popularmovies.R;
@@ -22,7 +21,7 @@ public class DetailsActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable(ListFragment.MOVIE_EXTRA_KEY, movie);
 
-        Fragment detailsFragment = new DetailsFragment();
+        DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(bundle);
 
         getSupportFragmentManager().

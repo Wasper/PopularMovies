@@ -16,12 +16,14 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
+import pl.wasper.popularmovies.domain.SortType;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
 
 /**
@@ -36,8 +38,10 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.movie_overview) TextView overview;
     @BindView(R.id.details_movie_poster) ImageView moviePoster;
     @BindView(R.id.favorites_button) Button favorites;
+    @BindBool(R.bool.use_tablet_view) boolean useTabletView;
 
     private Movie movie;
+    private SortType mSortType;
     private boolean hasRecord;
 
     @Override
@@ -57,8 +61,11 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
 
         favorites.setOnClickListener(this);
 
-        if (getArguments() != null && getArguments().containsKey(ListFragment.MOVIE_EXTRA_KEY)) {
+        if (getArguments() != null
+            && getArguments().containsKey(ListFragment.MOVIE_EXTRA_KEY)
+            && getArguments().containsKey(ListFragment.SORT_KEY)) {
             movie = getArguments().getParcelable(ListFragment.MOVIE_EXTRA_KEY);
+            mSortType = SortType.valueOf(getArguments().getString(ListFragment.SORT_KEY));
             prepareView(view, movie);
         }
 
@@ -97,6 +104,19 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
             preprareInactiveButton(view);
             hasRecord = false;
         }
+
+        if (useTabletView && mSortType == SortType.FAVORITES) {
+            refreshList();
+        }
+    }
+
+    private void refreshList() {
+        ListFragment listFragment = new ListFragment();
+
+        getActivity().getSupportFragmentManager()
+            .beginTransaction()
+            .replace(R.id.list_fragment, listFragment)
+            .commit();
     }
 
     private void preprareInactiveButton(View view) {

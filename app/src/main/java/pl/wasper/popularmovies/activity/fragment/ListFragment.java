@@ -44,7 +44,7 @@ public class ListFragment extends Fragment
     implements IListItemClickListener, IListCallback{
 
     public static final String MOVIE_EXTRA_KEY = "Movie";
-    private static final String SORT_KEY = "sort_type";
+    public static final String SORT_KEY = "sort_type";
     private static final String PREFERENCES_NAME = "app_preferences";
 
     @BindView(R.id.list_recycler_view) RecyclerView mRecyclerView;
@@ -60,7 +60,10 @@ public class ListFragment extends Fragment
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+
+        if (savedInstanceState == null) {
+            setHasOptionsMenu(true);
+        }
     }
 
     @Nullable
@@ -70,8 +73,10 @@ public class ListFragment extends Fragment
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(R.layout.fragment_list, container);
+        View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
+
+        hideProgressBar();
 
         preferences = view.getContext().getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         loadSortType();
@@ -104,8 +109,19 @@ public class ListFragment extends Fragment
 
         saveSortType();
         prepareList();
+        detachDetails();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void detachDetails() {
+        DetailsFragment detailsFragment =
+            (DetailsFragment) getFragmentManager().findFragmentById(R.id.details_fragment);
+
+        getFragmentManager()
+            .beginTransaction()
+            .detach(detailsFragment)
+            .commit();
     }
 
     private void prepareRecyclerView(View view) {
@@ -157,6 +173,7 @@ public class ListFragment extends Fragment
         if (useTabletView) {
             Bundle bundle = new Bundle();
             bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
+            bundle.putString(SORT_KEY, currentSortType.toString());
 
             Fragment detailFragment = new DetailsFragment();
             detailFragment.setArguments(bundle);
