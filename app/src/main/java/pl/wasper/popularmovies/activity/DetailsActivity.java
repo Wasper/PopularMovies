@@ -6,8 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.activity.fragment.DetailsFragment;
-import pl.wasper.popularmovies.activity.fragment.ListFragment;
-import pl.wasper.popularmovies.domain.Movie;
 
 public class DetailsActivity extends AppCompatActivity {
     @Override
@@ -16,10 +14,7 @@ public class DetailsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_details);
 
         Intent intent = getIntent();
-        Movie movie = intent.getParcelableExtra(ListFragment.MOVIE_EXTRA_KEY);
-
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(ListFragment.MOVIE_EXTRA_KEY, movie);
+        Bundle bundle = intent.getExtras();
 
         DetailsFragment detailsFragment = new DetailsFragment();
         detailsFragment.setArguments(bundle);

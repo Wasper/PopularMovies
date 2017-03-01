@@ -173,11 +173,11 @@ public class ListFragment extends Fragment
 
     @Override
     public void onListItemClick(View view, Movie movie) {
-        if (useTabletView) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
-            bundle.putString(SORT_KEY, currentSortType.toString());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
+        bundle.putString(SORT_KEY, currentSortType.toString());
 
+        if (useTabletView) {
             Fragment detailFragment = new DetailsFragment();
             detailFragment.setArguments(bundle);
 
@@ -187,7 +187,7 @@ public class ListFragment extends Fragment
                 .commit();
         } else {
             Intent intent = new Intent(view.getContext(), DetailsActivity.class);
-            intent.putExtra(MOVIE_EXTRA_KEY, movie);
+            intent.putExtras(bundle);
 
             startActivity(intent);
         }
