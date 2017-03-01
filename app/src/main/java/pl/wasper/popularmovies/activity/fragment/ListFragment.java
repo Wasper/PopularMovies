@@ -109,7 +109,10 @@ public class ListFragment extends Fragment
 
         saveSortType();
         prepareList();
-        detachDetails();
+
+        if (useTabletView) {
+            detachDetails();
+        }
 
         return super.onOptionsItemSelected(item);
     }
