@@ -34,37 +34,45 @@ public class MovieFragment extends Fragment {
         final Bundle bundle = getArguments();
 
         if (!useTabletView) {
-            addDetailsFragment(bundle);
+            prepareDefaultView(bundle);
         } else {
-            mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.details_title)));
-            mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.trailers_title)));
-            mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.reviews_title)));
-            mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-            PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), bundle);
-            mViewPager.setAdapter(pagerAdapter);
-            mViewPager.addOnPageChangeListener(
-                new TabLayout.TabLayoutOnPageChangeListener(mTabLayout)
-            );
-            mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-                @Override
-                public void onTabSelected(TabLayout.Tab tab) {
-                    mViewPager.setCurrentItem(tab.getPosition());
-                }
-
-                @Override
-                public void onTabUnselected(TabLayout.Tab tab) {
-
-                }
-
-                @Override
-                public void onTabReselected(TabLayout.Tab tab) {
-
-                }
-            });
+            prepareTabletView(bundle);
         }
 
         return view;
+    }
+
+    private void prepareTabletView(Bundle bundle) {
+        mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.details_title)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.trailers_title)));
+        mTabLayout.addTab(mTabLayout.newTab().setText(getText(R.string.reviews_title)));
+        mTabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), bundle);
+        mViewPager.setAdapter(pagerAdapter);
+        mViewPager.addOnPageChangeListener(
+            new TabLayout.TabLayoutOnPageChangeListener(mTabLayout)
+        );
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                mViewPager.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+    }
+
+    private void prepareDefaultView(Bundle bundle) {
+        addDetailsFragment(bundle);
     }
 
     private void addDetailsFragment(Bundle bundle) {
