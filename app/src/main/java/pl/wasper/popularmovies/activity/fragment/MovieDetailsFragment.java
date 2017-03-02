@@ -62,10 +62,10 @@ public class MovieDetailsFragment extends Fragment implements View.OnClickListen
         favorites.setOnClickListener(this);
 
         if (getArguments() != null
-            && getArguments().containsKey(ListFragment.MOVIE_EXTRA_KEY)
-            && getArguments().containsKey(ListFragment.SORT_KEY)) {
-            movie = getArguments().getParcelable(ListFragment.MOVIE_EXTRA_KEY);
-            mSortType = SortType.valueOf(getArguments().getString(ListFragment.SORT_KEY));
+            && getArguments().containsKey(MovieListFragment.MOVIE_EXTRA_KEY)
+            && getArguments().containsKey(MovieListFragment.SORT_KEY)) {
+            movie = getArguments().getParcelable(MovieListFragment.MOVIE_EXTRA_KEY);
+            mSortType = SortType.valueOf(getArguments().getString(MovieListFragment.SORT_KEY));
             prepareView(view, movie);
         }
 
@@ -111,7 +111,7 @@ public class MovieDetailsFragment extends Fragment implements View.OnClickListen
     }
 
     private void refreshList() {
-        ListFragment listFragment = new ListFragment();
+        MovieListFragment listFragment = new MovieListFragment();
 
         getActivity().getSupportFragmentManager()
             .beginTransaction()

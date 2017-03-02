@@ -25,8 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.activity.DetailsActivity;
-import pl.wasper.popularmovies.adapter.IListItemClickListener;
-import pl.wasper.popularmovies.adapter.ListAdapter;
+import pl.wasper.popularmovies.adapter.IMovieListItemClickListener;
+import pl.wasper.popularmovies.adapter.MovieListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.domain.SortType;
 import pl.wasper.popularmovies.network.URLBuilder;
@@ -40,8 +40,8 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by wasper on 28.02.17.
  */
 
-public class ListFragment extends Fragment
-    implements IListItemClickListener, IListCallback{
+public class MovieListFragment extends Fragment
+    implements IMovieListItemClickListener, IListCallback{
 
     public static final String MOVIE_EXTRA_KEY = "Movie";
     public static final String SORT_KEY = "sort_type";
@@ -53,7 +53,7 @@ public class ListFragment extends Fragment
     @BindInt(R.integer.column_count) int columnCount;
     @BindBool(R.bool.use_tablet_view) boolean useTabletView;
 
-    private ListAdapter mAdapter;
+    private MovieListAdapter mAdapter;
     private SortType currentSortType = SortType.TOP_RATED;
     private SharedPreferences preferences;
 
@@ -136,7 +136,7 @@ public class ListFragment extends Fragment
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ListAdapter(this);
+        mAdapter = new MovieListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
