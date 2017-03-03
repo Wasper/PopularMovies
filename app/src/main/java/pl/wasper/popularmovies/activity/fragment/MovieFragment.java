@@ -22,8 +22,8 @@ import pl.wasper.popularmovies.adapter.PagerAdapter;
 
 public class MovieFragment extends Fragment {
     @BindBool(R.bool.use_tablet_view) boolean useTabletView;
-    @BindView(R.id.fragment_movie_tabs) TabLayout mTabLayout;
-    @BindView(R.id.fragment_movie_view_pager) ViewPager mViewPager;
+    @BindView(R.id.fragment_movie_tabs) @Nullable TabLayout mTabLayout;
+    @BindView(R.id.fragment_movie_view_pager) @Nullable ViewPager mViewPager;
 
     @Nullable
     @Override
@@ -33,13 +33,17 @@ public class MovieFragment extends Fragment {
 
         final Bundle bundle = getArguments();
 
-        if (!useTabletView) {
+        if (!isTabletView()) {
             prepareDefaultView(bundle);
         } else {
             prepareTabletView(bundle);
         }
 
         return view;
+    }
+
+    private boolean isTabletView() {
+        return useTabletView && mTabLayout != null && mViewPager != null;
     }
 
     private void prepareTabletView(Bundle bundle) {
@@ -50,6 +54,7 @@ public class MovieFragment extends Fragment {
 
         PagerAdapter pagerAdapter = new PagerAdapter(getFragmentManager(), bundle);
         mViewPager.setAdapter(pagerAdapter);
+        mViewPager.setOffscreenPageLimit(mTabLayout.getTabCount());
         mViewPager.addOnPageChangeListener(
             new TabLayout.TabLayoutOnPageChangeListener(mTabLayout)
         );
@@ -73,6 +78,8 @@ public class MovieFragment extends Fragment {
 
     private void prepareDefaultView(Bundle bundle) {
         addDetailsFragment(bundle);
+        addTrailersFragment(bundle);
+        addReviewsFragment(bundle);
     }
 
     private void addDetailsFragment(Bundle bundle) {
@@ -81,7 +88,27 @@ public class MovieFragment extends Fragment {
 
         getFragmentManager()
             .beginTransaction()
-            .add(R.id.movie_details, movieDetailsFragment)
+            .add(R.id.movie_details_default, movieDetailsFragment)
+            .commit();
+    }
+
+    private void addTrailersFragment(Bundle bundle) {
+        MovieTrailersFragment movieTrailersFragment = new MovieTrailersFragment();
+        movieTrailersFragment.setArguments(bundle);
+
+        getFragmentManager()
+            .beginTransaction()
+            .add(R.id.movie_trailers_default, movieTrailersFragment)
+            .commit();
+    }
+
+    private void addReviewsFragment(Bundle bundle) {
+        MovieReviewsFragment movieReviewsFragment = new MovieReviewsFragment();
+        movieReviewsFragment.setArguments(bundle);
+
+        getFragmentManager()
+            .beginTransaction()
+            .add(R.id.movie_reviews_default, movieReviewsFragment)
             .commit();
     }
 }

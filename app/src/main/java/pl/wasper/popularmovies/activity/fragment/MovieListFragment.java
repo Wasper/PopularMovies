@@ -28,11 +28,11 @@ import pl.wasper.popularmovies.activity.DetailsActivity;
 import pl.wasper.popularmovies.adapter.IMovieListItemClickListener;
 import pl.wasper.popularmovies.adapter.MovieListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
-import pl.wasper.popularmovies.domain.SortType;
+import pl.wasper.popularmovies.domain.types.SortType;
 import pl.wasper.popularmovies.network.URLBuilder;
 import pl.wasper.popularmovies.task.FavoriteMoviesListTask;
-import pl.wasper.popularmovies.task.IListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
+import pl.wasper.popularmovies.task.callback.IMovieListCallback;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -41,16 +41,16 @@ import static android.content.Context.MODE_PRIVATE;
  */
 
 public class MovieListFragment extends Fragment
-    implements IMovieListItemClickListener, IListCallback{
+    implements IMovieListItemClickListener, IMovieListCallback {
 
     public static final String MOVIE_EXTRA_KEY = "Movie";
     public static final String SORT_KEY = "sort_type";
     private static final String PREFERENCES_NAME = "app_preferences";
 
-    @BindView(R.id.list_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.movie_list_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.error) TextView mError;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindInt(R.integer.column_count) int columnCount;
+    @BindInt(R.integer.movie_list_column_count) int columnCount;
     @BindBool(R.bool.use_tablet_view) boolean useTabletView;
 
     private MovieListAdapter mAdapter;
@@ -75,8 +75,6 @@ public class MovieListFragment extends Fragment
     ) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
-
-        hideProgressBar();
 
         preferences = view.getContext().getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         loadSortType();
@@ -225,7 +223,8 @@ public class MovieListFragment extends Fragment
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void showApiKeyError() {
+    @Override
+    public void showApiKeyError() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mError.setText(R.string.api_key_error);
         mError.setVisibility(View.VISIBLE);

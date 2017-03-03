@@ -23,7 +23,7 @@ import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
-import pl.wasper.popularmovies.domain.SortType;
+import pl.wasper.popularmovies.domain.types.SortType;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
 
 /**

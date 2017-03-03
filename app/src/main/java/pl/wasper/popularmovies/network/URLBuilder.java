@@ -6,7 +6,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import pl.wasper.popularmovies.domain.Movie;
-import pl.wasper.popularmovies.domain.SortType;
+import pl.wasper.popularmovies.domain.types.SortType;
 
 /**
  * Created by wasper on 25.01.17.
@@ -32,7 +32,7 @@ public class URLBuilder {
         return createUrlFromUri(uri);
     }
 
-    public static URL buildVideosListUrl(Movie movie) {
+    public static URL buildTrailersListUrl(Movie movie) {
         if (API_KEY_VALUE.equals("")) {
             return null;
         }

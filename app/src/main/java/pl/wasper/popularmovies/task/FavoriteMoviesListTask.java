@@ -9,16 +9,17 @@ import pl.wasper.popularmovies.AppApplication;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
+import pl.wasper.popularmovies.task.callback.IMovieListCallback;
 
 /**
  * Created by wasper on 22.02.17.
  */
 
 public class FavoriteMoviesListTask extends AsyncTask<Void, Void, ArrayList<Movie>> {
-    private IListCallback mIListCallback;
+    private IMovieListCallback mIMovieListCallback;
 
-    public FavoriteMoviesListTask(IListCallback IListCallback) {
-        mIListCallback = IListCallback;
+    public FavoriteMoviesListTask(IMovieListCallback IMovieListCallback) {
+        mIMovieListCallback = IMovieListCallback;
     }
 
     @Override
@@ -52,19 +53,19 @@ public class FavoriteMoviesListTask extends AsyncTask<Void, Void, ArrayList<Movi
     protected void onPreExecute() {
         super.onPreExecute();
 
-        mIListCallback.showProgressBar();
+        mIMovieListCallback.showProgressBar();
     }
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
-        mIListCallback.hideProgressBar();
+        mIMovieListCallback.hideProgressBar();
 
         if (movies == null) {
-            mIListCallback.showConnectError();
+            mIMovieListCallback.showConnectError();
         } else if (movies.isEmpty()) {
-            mIListCallback.showParseError();
+            mIMovieListCallback.showParseError();
         } else {
-            mIListCallback.adaptElements(movies);
+            mIMovieListCallback.adaptElements(movies);
         }
     }
 }
