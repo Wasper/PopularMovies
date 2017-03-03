@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import pl.wasper.popularmovies.R;
-import pl.wasper.popularmovies.activity.fragment.ListFragment;
+import pl.wasper.popularmovies.activity.fragment.MovieListFragment;
 
 public class ListActivity extends AppCompatActivity {
     @Override
@@ -12,7 +12,7 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        ListFragment fragment = new ListFragment();
+        MovieListFragment fragment = new MovieListFragment();
 
         getSupportFragmentManager()
             .beginTransaction()

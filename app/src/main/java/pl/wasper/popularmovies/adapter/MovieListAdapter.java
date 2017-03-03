@@ -19,12 +19,12 @@ import pl.wasper.popularmovies.network.PosterURLBuilder;
  * Created by wasper on 26.01.17.
  */
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
+public class MovieListAdapter extends RecyclerView.Adapter<MovieListAdapter.ViewHolder> {
     private ArrayList<Movie> movies = new ArrayList<Movie>();
-    private IListItemClickListener mListItemClickListener;
+    private IMovieListItemClickListener mMovieListItemClickListener;
 
-    public ListAdapter(IListItemClickListener listItemClickListener) {
-        mListItemClickListener = listItemClickListener;
+    public MovieListAdapter(IMovieListItemClickListener listItemClickListener) {
+        mMovieListItemClickListener = listItemClickListener;
     }
 
     public void setMoviesList(ArrayList<Movie> movies) {
@@ -32,16 +32,16 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public MovieListAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         Context context = viewGroup.getContext();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.grid_element, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.movie_list_grid_element, viewGroup, false);
 
-        return new ListAdapter.ViewHolder(view);
+        return new MovieListAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(MovieListAdapter.ViewHolder holder, int position) {
         holder.bind(position);
     }
 
@@ -69,7 +69,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
         @Override
         public void onClick(View v) {
-            mListItemClickListener.onListItemClick(v, movies.get(getAdapterPosition()));
+            mMovieListItemClickListener.onListItemClick(v, movies.get(getAdapterPosition()));
         }
     }
 }

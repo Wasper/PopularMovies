@@ -25,14 +25,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.activity.DetailsActivity;
-import pl.wasper.popularmovies.adapter.IListItemClickListener;
-import pl.wasper.popularmovies.adapter.ListAdapter;
+import pl.wasper.popularmovies.adapter.IMovieListItemClickListener;
+import pl.wasper.popularmovies.adapter.MovieListAdapter;
 import pl.wasper.popularmovies.domain.Movie;
-import pl.wasper.popularmovies.domain.SortType;
+import pl.wasper.popularmovies.domain.types.SortType;
 import pl.wasper.popularmovies.network.URLBuilder;
 import pl.wasper.popularmovies.task.FavoriteMoviesListTask;
-import pl.wasper.popularmovies.task.IListCallback;
 import pl.wasper.popularmovies.task.MoviesListTask;
+import pl.wasper.popularmovies.task.callback.IMovieListCallback;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -40,20 +40,20 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by wasper on 28.02.17.
  */
 
-public class ListFragment extends Fragment
-    implements IListItemClickListener, IListCallback{
+public class MovieListFragment extends Fragment
+    implements IMovieListItemClickListener, IMovieListCallback {
 
     public static final String MOVIE_EXTRA_KEY = "Movie";
     public static final String SORT_KEY = "sort_type";
     private static final String PREFERENCES_NAME = "app_preferences";
 
-    @BindView(R.id.list_recycler_view) RecyclerView mRecyclerView;
+    @BindView(R.id.movie_list_recycler_view) RecyclerView mRecyclerView;
     @BindView(R.id.error) TextView mError;
     @BindView(R.id.progress_bar) ProgressBar progressBar;
-    @BindInt(R.integer.column_count) int columnCount;
+    @BindInt(R.integer.movie_list_column_count) int columnCount;
     @BindBool(R.bool.use_tablet_view) boolean useTabletView;
 
-    private ListAdapter mAdapter;
+    private MovieListAdapter mAdapter;
     private SortType currentSortType = SortType.TOP_RATED;
     private SharedPreferences preferences;
 
@@ -75,8 +75,6 @@ public class ListFragment extends Fragment
     ) {
         View view = inflater.inflate(R.layout.fragment_list, container, false);
         ButterKnife.bind(this, view);
-
-        hideProgressBar();
 
         preferences = view.getContext().getSharedPreferences(PREFERENCES_NAME, MODE_PRIVATE);
         loadSortType();
@@ -118,12 +116,12 @@ public class ListFragment extends Fragment
     }
 
     private void detachDetails() {
-        DetailsFragment detailsFragment =
-            (DetailsFragment) getFragmentManager().findFragmentById(R.id.details_fragment);
+        MovieFragment movieFragment =
+            (MovieFragment) getFragmentManager().findFragmentById(R.id.movie_fragment);
 
         getFragmentManager()
             .beginTransaction()
-            .detach(detailsFragment)
+            .detach(movieFragment)
             .commit();
     }
 
@@ -136,7 +134,7 @@ public class ListFragment extends Fragment
         );
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new ListAdapter(this);
+        mAdapter = new MovieListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
     }
 
@@ -173,21 +171,21 @@ public class ListFragment extends Fragment
 
     @Override
     public void onListItemClick(View view, Movie movie) {
-        if (useTabletView) {
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
-            bundle.putString(SORT_KEY, currentSortType.toString());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MOVIE_EXTRA_KEY, movie);
+        bundle.putString(SORT_KEY, currentSortType.toString());
 
-            Fragment detailFragment = new DetailsFragment();
-            detailFragment.setArguments(bundle);
+        if (useTabletView) {
+            MovieFragment movieFragment = new MovieFragment();
+            movieFragment.setArguments(bundle);
 
             getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.details_fragment, detailFragment)
+                .replace(R.id.movie_fragment, movieFragment)
                 .commit();
         } else {
             Intent intent = new Intent(view.getContext(), DetailsActivity.class);
-            intent.putExtra(MOVIE_EXTRA_KEY, movie);
+            intent.putExtras(bundle);
 
             startActivity(intent);
         }
@@ -225,7 +223,8 @@ public class ListFragment extends Fragment
         progressBar.setVisibility(View.INVISIBLE);
     }
 
-    private void showApiKeyError() {
+    @Override
+    public void showApiKeyError() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mError.setText(R.string.api_key_error);
         mError.setVisibility(View.VISIBLE);

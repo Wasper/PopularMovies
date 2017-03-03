@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.domain.Movie;
 import pl.wasper.popularmovies.network.NetworkTool;
+import pl.wasper.popularmovies.task.callback.IMovieListCallback;
 
 /**
  * Created by wasper on 25.01.17.
  */
 
 public class MoviesListTask extends AsyncTask<URL, Void, ArrayList<Movie>> {
-    private IListCallback mIListCallback;
+    private IMovieListCallback mIMovieListCallback;
 
-    public MoviesListTask(IListCallback IListCallback) {
-        this.mIListCallback = IListCallback;
+    public MoviesListTask(IMovieListCallback IMovieListCallback) {
+        this.mIMovieListCallback = IMovieListCallback;
     }
 
     @Override
@@ -37,19 +38,19 @@ public class MoviesListTask extends AsyncTask<URL, Void, ArrayList<Movie>> {
     protected void onPreExecute() {
         super.onPreExecute();
 
-        mIListCallback.showProgressBar();
+        mIMovieListCallback.showProgressBar();
     }
 
     @Override
     protected void onPostExecute(ArrayList<Movie> movies) {
-        mIListCallback.hideProgressBar();
+        mIMovieListCallback.hideProgressBar();
 
         if (movies == null) {
-            mIListCallback.showConnectError();
+            mIMovieListCallback.showConnectError();
         } else if (movies.isEmpty()) {
-            mIListCallback.showParseError();
+            mIMovieListCallback.showParseError();
         } else {
-            mIListCallback.adaptElements(movies);
+            mIMovieListCallback.adaptElements(movies);
         }
     }
 }

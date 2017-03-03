@@ -23,14 +23,14 @@ import pl.wasper.popularmovies.R;
 import pl.wasper.popularmovies.converter.MoviesConverter;
 import pl.wasper.popularmovies.data.FavoritesMovieContract;
 import pl.wasper.popularmovies.domain.Movie;
-import pl.wasper.popularmovies.domain.SortType;
+import pl.wasper.popularmovies.domain.types.SortType;
 import pl.wasper.popularmovies.network.PosterURLBuilder;
 
 /**
  * Created by wasper on 28.02.17.
  */
 
-public class DetailsFragment extends Fragment implements View.OnClickListener {
+public class MovieDetailsFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.movie_title) TextView title;
     @BindView(R.id.movie_original_title) TextView originalTitle;
     @BindView(R.id.movie_release_date) TextView releaseDate;
@@ -56,16 +56,16 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
         @Nullable ViewGroup container,
         @Nullable Bundle savedInstanceState
     ) {
-        View view = inflater.inflate(R.layout.fragment_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_details, container, false);
         ButterKnife.bind(this, view);
 
         favorites.setOnClickListener(this);
 
         if (getArguments() != null
-            && getArguments().containsKey(ListFragment.MOVIE_EXTRA_KEY)
-            && getArguments().containsKey(ListFragment.SORT_KEY)) {
-            movie = getArguments().getParcelable(ListFragment.MOVIE_EXTRA_KEY);
-            mSortType = SortType.valueOf(getArguments().getString(ListFragment.SORT_KEY));
+            && getArguments().containsKey(MovieListFragment.MOVIE_EXTRA_KEY)
+            && getArguments().containsKey(MovieListFragment.SORT_KEY)) {
+            movie = getArguments().getParcelable(MovieListFragment.MOVIE_EXTRA_KEY);
+            mSortType = SortType.valueOf(getArguments().getString(MovieListFragment.SORT_KEY));
             prepareView(view, movie);
         }
 
@@ -111,7 +111,7 @@ public class DetailsFragment extends Fragment implements View.OnClickListener {
     }
 
     private void refreshList() {
-        ListFragment listFragment = new ListFragment();
+        MovieListFragment listFragment = new MovieListFragment();
 
         getActivity().getSupportFragmentManager()
             .beginTransaction()
