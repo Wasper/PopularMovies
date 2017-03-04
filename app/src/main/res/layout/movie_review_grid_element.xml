@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:orientation="vertical"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:id="@+id/movie_review_grid_element">
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:padding="@dimen/details_element_padding"
+              android:id="@+id/movie_review_grid_element">
 
     <TextView
         android:id="@+id/review_grid_element_author"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/review_title"/>
 
     <TextView
         android:id="@+id/review_grid_element_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        style="@style/review_content"/>
 
     <TextView
         android:id="@+id/review_grid_element_see_more"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="end"
         android:text="@string/see_on_webpage"/>
 
 </LinearLayout>
