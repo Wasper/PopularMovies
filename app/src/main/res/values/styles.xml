@@ -7,4 +7,28 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
+    <style name="trailer_title">
+        <item name="android:paddingLeft">@dimen/details_trailers_title_padding_left</item>
+        <item name="android:textSize">@dimen/details_trailers_title_size</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="review_title">
+        <item name="android:textSize">@dimen/details_reviews_title_size</item>
+        <item name="android:layout_marginBottom">@dimen/details_reviews_element_margin_bottom</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <style name="review_content">
+        <item name="android:layout_marginBottom">@dimen/details_reviews_element_margin_bottom</item>
+        <item name="android:textStyle">italic</item>
+    </style>
+
+    <style name="details_group_title">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">@dimen/details_group_title_size</item>
+        <item name="android:layout_marginTop">@dimen/details_group_title_margin</item>
+        <item name="android:layout_marginBottom">@dimen/details_group_title_margin</item>
+    </style>
 </resources>
