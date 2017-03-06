@@ -31,7 +31,7 @@ public class MovieFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_movie, container, false);
         ButterKnife.bind(this, view);
 
-        final Bundle bundle = getArguments();
+        Bundle bundle = getArguments();
 
         if (!isTabletView()) {
             prepareDefaultView(bundle);
@@ -41,6 +41,13 @@ public class MovieFragment extends Fragment {
 
         return view;
     }
+
+//    @Override
+//    public void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        outState.putAll(getArguments());
+//    }
 
     private boolean isTabletView() {
         return useTabletView && mTabLayout != null && mViewPager != null;
@@ -86,7 +93,7 @@ public class MovieFragment extends Fragment {
         MovieDetailsFragment movieDetailsFragment = new MovieDetailsFragment();
         movieDetailsFragment.setArguments(bundle);
 
-        getFragmentManager()
+        getChildFragmentManager()
             .beginTransaction()
             .add(R.id.movie_details_default, movieDetailsFragment)
             .commit();
@@ -96,7 +103,7 @@ public class MovieFragment extends Fragment {
         MovieTrailersFragment movieTrailersFragment = new MovieTrailersFragment();
         movieTrailersFragment.setArguments(bundle);
 
-        getFragmentManager()
+        getChildFragmentManager()
             .beginTransaction()
             .add(R.id.movie_trailers_default, movieTrailersFragment)
             .commit();
@@ -106,7 +113,7 @@ public class MovieFragment extends Fragment {
         MovieReviewsFragment movieReviewsFragment = new MovieReviewsFragment();
         movieReviewsFragment.setArguments(bundle);
 
-        getFragmentManager()
+        getChildFragmentManager()
             .beginTransaction()
             .add(R.id.movie_reviews_default, movieReviewsFragment)
             .commit();

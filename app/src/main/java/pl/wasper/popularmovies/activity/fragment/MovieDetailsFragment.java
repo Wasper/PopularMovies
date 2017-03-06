@@ -44,11 +44,6 @@ public class MovieDetailsFragment extends Fragment implements View.OnClickListen
     private SortType mSortType;
     private boolean hasRecord;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
     @Nullable
     @Override
     public View onCreateView(
@@ -113,7 +108,7 @@ public class MovieDetailsFragment extends Fragment implements View.OnClickListen
     private void refreshList() {
         MovieListFragment listFragment = new MovieListFragment();
 
-        getActivity().getSupportFragmentManager()
+        getFragmentManager()
             .beginTransaction()
             .replace(R.id.list_fragment, listFragment)
             .commit();

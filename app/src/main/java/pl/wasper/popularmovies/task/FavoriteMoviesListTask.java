@@ -63,7 +63,7 @@ public class FavoriteMoviesListTask extends AsyncTask<Void, Void, ArrayList<Movi
         if (movies == null) {
             mIMovieListCallback.showConnectError();
         } else if (movies.isEmpty()) {
-            mIMovieListCallback.showParseError();
+            mIMovieListCallback.showEmptyListInfo();
         } else {
             mIMovieListCallback.adaptElements(movies);
         }

@@ -139,6 +139,8 @@ public class MovieListFragment extends Fragment
     }
 
     public void prepareList() {
+        mError.setVisibility(View.INVISIBLE);
+
         switch (currentSortType) {
             case TOP_RATED:
             case POPULAR:
@@ -208,6 +210,13 @@ public class MovieListFragment extends Fragment
     public void showParseError() {
         mRecyclerView.setVisibility(View.INVISIBLE);
         mError.setText(R.string.parsing_error);
+        mError.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showEmptyListInfo() {
+        mRecyclerView.setVisibility(View.INVISIBLE);
+        mError.setText(R.string.empty_list_info);
         mError.setVisibility(View.VISIBLE);
     }
 
