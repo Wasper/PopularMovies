@@ -17,4 +17,5 @@
     <string name="reviews_title">Reviews</string>
     <string name="trailer_image_description">Trailer image</string>
     <string name="see_on_webpage">See page..</string>
+    <string name="empty_list_info">There is no favorite movies</string>
 </resources>

@@ -10,4 +10,5 @@ import pl.wasper.popularmovies.domain.Movie;
 
 public interface IMovieListCallback extends IListCallback {
     void adaptElements(ArrayList<Movie> movies);
+    void showEmptyListInfo();
 }
